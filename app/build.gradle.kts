@@ -27,6 +27,7 @@ import extension.setupDependencyInjection
 import extension.setupKover
 import extension.testCommonDependencies
 import java.util.Locale
+import java.util.Properties
 
 plugins {
     id("io.element.android-compose-application")
@@ -106,7 +107,7 @@ android {
             // keystore.properties a la racine du repo (gitignore, jamais commite).
             val keystorePropsFile = rootProject.file("keystore.properties")
             if (keystorePropsFile.exists()) {
-                val keystoreProps = java.util.Properties().apply {
+                val keystoreProps = Properties().apply {
                     load(keystorePropsFile.inputStream())
                 }
                 keyAlias = keystoreProps.getProperty("keyAlias")
