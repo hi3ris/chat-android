@@ -55,7 +55,7 @@ internal fun CallHistoryView(
         state = lazyListState,
         contentPadding = contentPadding,
     ) {
-        items(state.callItems, key = { it.roomId.value }) { item ->
+        items(state.callItems, key = { "${it.roomId.value}:${it.timestamp}" }) { item ->
             CallHistoryItemRow(
                 item = item,
                 onClick = { onRoomClick(item.roomId) },

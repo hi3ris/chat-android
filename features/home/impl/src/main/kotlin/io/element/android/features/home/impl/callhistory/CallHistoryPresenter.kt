@@ -127,10 +127,6 @@ class CallHistoryPresenter(
         }
         Timber.d("CallHistory: deep scan done, ${_callHistory.value.size} total calls")
 
-        // B – after deep scan, start live watchers for all rooms
-        roomIds.forEach { roomId ->
-            launch { watchRoomForLiveCalls(roomId) }
-        }
     }
 
     /**
@@ -175,26 +171,6 @@ class CallHistoryPresenter(
         }
     }
 
-    /**
-     * B: Keep a live watcher on each room's timeline.
-     * When a new event is synced, re-check rawTimelineItems for new call events.
-     */
-    private suspend fun watchRoomForLiveCalls(roomId: RoomId) {
-        val room = client.getJoinedRoom(roomId) ?: return
-        try {
-            // onSyncedEventReceived fires each time the Rust SDK receives a new timeline event
-            room.liveTimeline.onSyncedEventReceived.collect {
-                val items = withTimeoutOrNull(2_000L) {
-                    room.liveTimeline.rawTimelineItems.first { it.isNotEmpty() }
-                } ?: return@collect
-
-                val hadNew = mergeCallItems(room, items)
-                if (hadNew) store.save(_callHistory.value)
-            }
-        } catch (e: Exception) {
-            Timber.w(e, "CallHistory: live watcher failed for $roomId")
-        }
-    }
 
     /** Returns true if at least one new call item was added. */
     private suspend fun mergeCallItems(room: JoinedRoom, items: List<MatrixTimelineItem>): Boolean {
