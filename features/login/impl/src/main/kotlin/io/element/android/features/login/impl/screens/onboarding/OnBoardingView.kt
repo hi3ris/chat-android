@@ -8,6 +8,19 @@
 
 package io.element.android.features.login.impl.screens.onboarding
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,10 +30,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
@@ -41,8 +59,6 @@ import io.element.android.features.login.impl.screens.onboarding.classic.Confirm
 import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicEvent
 import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicState
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
-import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
@@ -101,20 +117,49 @@ fun OnBoardingView(
         )
     }
 
-    if (state.isAddingAccount) {
-        AddOtherAccountScaffold(
-            modifier = modifier,
-            loginView = loginView,
-            buttons = buttons,
-            onBackClick = onBackClick,
+    val infiniteTransition = rememberInfiniteTransition(label = "flag_anim")
+    val glowAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.2f,
+        targetValue = 0.75f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1400, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "glow_alpha",
+    )
+
+    Box(modifier = modifier.fillMaxSize()) {
+        // Fond animé synchronisé : vert → jaune → rouge → blanc/noir selon thème
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF006A4E).copy(alpha = glowAlpha * 0.75f),
+                            Color(0xFFFFCE00).copy(alpha = glowAlpha * 0.45f),
+                            Color(0xFFD21034).copy(alpha = glowAlpha * 0.25f),
+                            ElementTheme.colors.bgCanvasDefault,
+                        )
+                    )
+                )
         )
-    } else {
-        AddFirstAccountScaffold(
-            modifier = modifier,
-            state = state,
-            loginView = loginView,
-            buttons = buttons,
-        )
+        if (state.isAddingAccount) {
+            AddOtherAccountScaffold(
+                modifier = Modifier,
+                loginView = loginView,
+                buttons = buttons,
+                onBackClick = onBackClick,
+            )
+        } else {
+            AddFirstAccountScaffold(
+                modifier = Modifier,
+                state = state,
+                loginView = loginView,
+                buttons = buttons,
+            )
+        }
+        AnimatedFlagBorder(alpha = glowAlpha)
     }
 
     LoginWithElementClassicView(
@@ -164,15 +209,9 @@ private fun AddFirstAccountScaffold(
 ) {
     OnBoardingPage(
         modifier = modifier,
-        renderBackground = state.onBoardingLogoResId == null,
+        renderBackground = false,
         content = {
-            if (state.onBoardingLogoResId != null) {
-                OnBoardingLogo(
-                    onBoardingLogoResId = state.onBoardingLogoResId,
-                )
-            } else {
-                OnBoardingContent(state = state)
-            }
+            OnBoardingContent(state = state)
             loginView()
         },
         footer = {
@@ -200,66 +239,124 @@ private fun AddOtherAccountScaffold(
 
 @Composable
 private fun OnBoardingContent(state: OnBoardingState) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = BiasAlignment(
-                horizontalBias = 0f,
-                verticalBias = -0.4f
-            )
-        ) {
-            ElementLogoAtom(
-                size = ElementLogoAtomSize.Large,
-                modifier = Modifier.padding(top = ElementLogoAtomSize.Large.shadowRadius / 2)
-            )
+    val logoResId = state.onBoardingLogoResId
+    val hasCdaLogo = logoResId != null
+    var showLink by remember { mutableStateOf(!hasCdaLogo) }
+
+    LaunchedEffect(hasCdaLogo) {
+        if (hasCdaLogo) {
+            while (true) {
+                delay(2500L)
+                showLink = true
+                delay(2500L)
+                showLink = false
+            }
         }
+    }
+
+    val linkAlpha by animateFloatAsState(
+        targetValue = if (showLink) 1f else 0f,
+        animationSpec = tween(durationMillis = 600),
+        label = "link_alpha",
+    )
+    val cdaAlpha = 1f - linkAlpha
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Zone logo — superposition avec alpha croisé
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = BiasAlignment(
-                horizontalBias = 0f,
-                verticalBias = 0.6f
-            )
+            contentAlignment = BiasAlignment(horizontalBias = 0f, verticalBias = -0.4f)
+        ) {
+            LinkLogoMark(modifier = Modifier.alpha(linkAlpha))
+            if (hasCdaLogo && logoResId != null) {
+                Image(
+                    painter = painterResource(id = logoResId),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(160.dp)
+                        .alpha(cdaAlpha)
+                )
+            }
+        }
+        // Zone texte — superposition avec alpha croisé
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = BiasAlignment(horizontalBias = 0f, verticalBias = 0.6f)
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .alpha(linkAlpha),
                 horizontalAlignment = CenterHorizontally,
             ) {
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_welcome_title),
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontHeadingLgBold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_welcome_message, state.productionApplicationName),
                     color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
+            }
+            if (hasCdaLogo) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .alpha(cdaAlpha),
+                    horizontalAlignment = CenterHorizontally,
+                ) {
+                    Text(
+                        text = "CYBER DEFENSE AFRICA",
+                        color = ElementTheme.colors.textPrimary,
+                        style = ElementTheme.typography.fontHeadingLgBold,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Protecting the African Cyberspace",
+                        color = ElementTheme.colors.textSecondary,
+                        style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun OnBoardingLogo(
-    onBoardingLogoResId: Int,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Image(
-            painter = painterResource(id = onBoardingLogoResId),
-            contentDescription = null
+private fun LinkLogoMark(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_kdodo_onboarding),
+        contentDescription = null,
+        modifier = modifier.size(140.dp),
+    )
+}
+
+@Composable
+private fun AnimatedFlagBorder(alpha: Float) {
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val borderWidth = 4.dp.toPx()
+        val brush = Brush.sweepGradient(
+            colors = listOf(
+                Color(0xFF006A4E), // vert CDA
+                Color(0xFFFFCE00), // jaune CDA
+                Color(0xFFD21034), // rouge CDA
+                Color(0xFF006A4E), // vert (boucle)
+            )
         )
+        // Couches halo — épaisseur décroissante vers l'intérieur, alpha croissant
+        drawRect(brush = brush, style = Stroke(width = borderWidth + 22.dp.toPx()), alpha = alpha * 0.04f)
+        drawRect(brush = brush, style = Stroke(width = borderWidth + 15.dp.toPx()), alpha = alpha * 0.08f)
+        drawRect(brush = brush, style = Stroke(width = borderWidth + 9.dp.toPx()),  alpha = alpha * 0.16f)
+        drawRect(brush = brush, style = Stroke(width = borderWidth + 4.dp.toPx()),  alpha = alpha * 0.30f)
+        // Bordure principale nette
+        drawRect(brush = brush, style = Stroke(width = borderWidth), alpha = alpha)
     }
 }
 

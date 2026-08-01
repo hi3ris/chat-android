@@ -8,7 +8,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"Custom Element Call base URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Set a custom base URL for Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Invalid URL, please make sure you include the protocol (http/https) and the correct address."</string>
-  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Hide avatars in room invite requests"</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Hide avatars in group invite requests"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Hide media previews in timeline"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
   <string name="screen_advanced_settings_media_compression_description">"Upload photos and videos faster and reduce data usage"</string>
@@ -29,7 +29,7 @@
   <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Always hide"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Always show"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"In private rooms"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"In private groups"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"A hidden media can always be shown by tapping on it"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Show media in timeline"</string>
   <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
@@ -66,12 +66,12 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
   <string name="screen_notification_settings_group_chats">"Group chats"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted groups, you may not get notified in some groups."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_mode_all">"All"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Notify me for"</string>
-  <string name="screen_notification_settings_room_mention_label">"Notify me on @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Notify me on @group"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"To receive notifications, please change your %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>

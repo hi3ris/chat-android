@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -26,6 +29,16 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.persistentListOf
 
+private val cdaBorderColor = Color(0xFF006A4E)
+private val cdaTricolorBrush = Brush.sweepGradient(
+    colors = listOf(
+        Color(0xFFD21034),
+        Color(0xFF006A4E),
+        Color(0xFFFFCE00),
+        Color(0xFFD21034),
+    )
+)
+
 @Composable
 fun Avatar(
     avatarData: AvatarData,
@@ -36,7 +49,15 @@ fun Avatar(
     forcedAvatarSize: Dp? = null,
     // If true, will show initials even if avatarData.url is not null
     hideImage: Boolean = false,
+    showTricolorBorder: Boolean = false,
 ) {
+    val size = forcedAvatarSize ?: avatarData.size.dp
+    val shape = avatarType.avatarShape(size)
+    // Bordure uniquement sur les avatars utilisateur
+    val userBorderedModifier = when {
+        showTricolorBorder -> modifier.border(width = 2.dp, brush = cdaTricolorBrush, shape = shape)
+        else -> modifier.border(width = 2.dp, color = cdaBorderColor, shape = shape)
+    }
     when (avatarType) {
         is AvatarType.Room -> RoomAvatar(
             avatarData = avatarData,
@@ -48,7 +69,7 @@ fun Avatar(
         )
         AvatarType.User -> UserAvatar(
             avatarData = avatarData,
-            modifier = modifier,
+            modifier = userBorderedModifier,
             contentDescription = contentDescription,
             forcedAvatarSize = forcedAvatarSize,
             hideImage = hideImage,

@@ -24,14 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.annotations.CoreColorToken
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.internal.DarkColorTokens
 import io.element.android.compound.tokens.generated.internal.LightColorTokens
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -108,37 +107,35 @@ fun SunsetPage(
 @OptIn(CoreColorToken::class)
 @Composable
 private fun SunsetBackground() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        // The top background colors are the opposite of the current theme ones
-        val topBackgroundColor = if (ElementTheme.isLightTheme) {
-            DarkColorTokens.colorThemeBg
-        } else {
-            LightColorTokens.colorThemeBg
-        }
-        // The bottom background colors follow the current theme
-        val bottomBackgroundColor = if (ElementTheme.isLightTheme) {
-            LightColorTokens.colorThemeBg
-        } else {
-            // The dark background color doesn't 100% match the image, so we use a custom color
-            Color(0xFF121418)
-        }
+    val bottomBackgroundColor = if (ElementTheme.isLightTheme) {
+        LightColorTokens.colorThemeBg
+    } else {
+        Color(0xFF121418)
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Fond : dégradé multi-stop CDA vert → fond thème
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.3f)
-                .background(topBackgroundColor)
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colorStops = arrayOf(
+                            0.0f to Color(0xFF006A4E),
+                            0.35f to Color(0xFF005C43),
+                            0.65f to bottomBackgroundColor.copy(alpha = 0.6f),
+                            1.0f to bottomBackgroundColor,
+                        )
+                    )
+                )
         )
+        // Logo CDA centré en haut
         Image(
-            modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = R.drawable.bg_migration),
-            contentScale = ContentScale.Crop,
+            painter = painterResource(id = R.drawable.element_logo),
             contentDescription = null,
-        )
-        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.7f)
-                .background(bottomBackgroundColor)
+                .size(72.dp)
+                .align(Alignment.TopCenter)
+                .padding(top = 48.dp),
         )
     }
 }

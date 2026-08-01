@@ -54,7 +54,6 @@ import io.element.android.libraries.designsystem.components.TopAppBarScrollBehav
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGradient
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
@@ -98,11 +97,7 @@ fun HomeTopBar(
 ) {
     Column(modifier) {
         TopAppBar(
-            modifier = Modifier
-                .backgroundVerticalGradient(
-                    isVisible = !areSearchResultsDisplayed,
-                )
-                .statusBarsPadding(),
+            modifier = Modifier.statusBarsPadding(),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
                 scrolledContainerColor = Color.Transparent,
@@ -115,6 +110,7 @@ fun HomeTopBar(
                             else -> stringResource(selectedNavigationItem.labelRes)
                         }
                     }
+                    HomeNavigationBarItem.Calls -> stringResource(selectedNavigationItem.labelRes)
                     HomeNavigationBarItem.Spaces -> stringResource(selectedNavigationItem.labelRes)
                 }
                 Text(
@@ -141,6 +137,7 @@ fun HomeTopBar(
                         canReportBug = canReportBug,
                         spaceFiltersState = spaceFiltersState,
                     )
+                    HomeNavigationBarItem.Calls -> Unit
                     HomeNavigationBarItem.Spaces -> SpacesMenuItems(
                         canCreateSpaces = canCreateSpaces,
                         onCreateSpace = onCreateSpace
@@ -342,6 +339,7 @@ private fun AccountIcon(
                 avatarData = avatarData,
                 avatarType = AvatarType.User,
                 contentDescription = if (isCurrentAccount) stringResource(CommonStrings.common_settings) else null,
+                showTricolorBorder = isCurrentAccount,
             )
             if (showAvatarIndicator) {
                 RedIndicatorAtom(

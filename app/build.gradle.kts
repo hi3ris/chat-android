@@ -101,6 +101,20 @@ android {
             storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
                 ?: project.property("signing.element.nightly.storePassword") as? String?
         }
+        register("release") {
+            // Cle d'upload Play Store (Link, usage interne). Lue depuis
+            // keystore.properties a la racine du repo (gitignore, jamais commite).
+            val keystorePropsFile = rootProject.file("keystore.properties")
+            if (keystorePropsFile.exists()) {
+                val keystoreProps = java.util.Properties().apply {
+                    load(keystorePropsFile.inputStream())
+                }
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+                storeFile = file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+            }
+        }
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
@@ -127,30 +141,29 @@ android {
                 "login_redirect_scheme",
                 oidcRedirectSchemeBase,
             )
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
 
-            optimization {
-                enable = true
-                keepRules {
-                    files.add(File(projectDir, "common-proguard-rules.pro"))
-                    files.add(getDefaultProguardFile("proguard-android-optimize.txt"))
+            isMinifyEnabled = true
 
-                    // Depending on whether the app flavor is enterprise or not we want to use different proguard rules.
-                    val flavorProguardFile = if (isEnterpriseBuild) {
-                        // Custom rules for enterprise builds
-                        File(projectDir, "enterprise-proguard-rules.pro")
-                    } else {
-                        // These default rules prevent the OSS app from being obfuscated
-                        File(projectDir, "default-proguard-rules.pro")
-                    }
-
-                    if (flavorProguardFile.exists()) {
-                        files.add(flavorProguardFile)
-                    } else {
-                        logger.warn("Proguard file ${flavorProguardFile.absolutePath} does not exist")
-                    }
-                }
+            // Depending on whether the app flavor is enterprise or not we want to use different proguard rules.
+            val flavorProguardFile = if (isEnterpriseBuild) {
+                // Custom rules for enterprise builds
+                File(projectDir, "enterprise-proguard-rules.pro")
+            } else {
+                // These default rules prevent the OSS app from being obfuscated
+                File(projectDir, "default-proguard-rules.pro")
             }
+
+            val proguardFilesList = mutableListOf<Any>(
+                File(projectDir, "common-proguard-rules.pro"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+            )
+            if (flavorProguardFile.exists()) {
+                proguardFilesList.add(flavorProguardFile)
+            } else {
+                logger.warn("Proguard file ${flavorProguardFile.absolutePath} does not exist")
+            }
+            proguardFiles(*proguardFilesList.toTypedArray())
         }
 
         register("nightly") {
@@ -183,11 +196,7 @@ android {
                 }
                 // This should not be required, but if I do not add the appId, I get this error:
                 // "App Distribution halted because it had a problem uploading the APK: [404] Requested entity was not found."
-                appId = if (isEnterpriseBuild) {
-                    "1:912726360885:android:3f7e1fe644d99d5a00427c"
-                } else {
-                    "1:912726360885:android:e17435e0beb0303000427c"
-                }
+                appId = "1:584160326379:android:56bb9b5dfcc6d980dd04ae"
             }
         }
     }

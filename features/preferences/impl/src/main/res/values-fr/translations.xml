@@ -8,7 +8,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"URL de base pour Element Call personnalisée"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Configurer une URL de base pour Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte."</string>
-  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Masquer les avatars des salons dans les invitations"</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Masquer les avatars des groupes dans les invitations"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Masquer les aperçus des médias dans les discussions"</string>
   <string name="screen_advanced_settings_labs">"Expérimental"</string>
   <string name="screen_advanced_settings_media_compression_description">"Téléchargez des photos et des vidéos plus rapidement et réduisez la consommation de données"</string>
@@ -29,7 +29,7 @@
   <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Toujours cacher"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Toujours montrer"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Dans les salons privés"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Dans les groupes privés"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un média caché peut toujours être affiché en cliquant dessus"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Afficher les médias dans les discussions."</string>
   <string name="screen_advanced_settings_view_source_description">"Activer cette option pour pouvoir voir la source des messages dans la discussion."</string>
@@ -56,7 +56,7 @@
 
 Si vous continuez, il est possible que certains de vos paramètres soient modifiés."</string>
   <string name="screen_notification_settings_direct_chats">"Discussions directes"</string>
-  <string name="screen_notification_settings_edit_custom_settings_section_title">"Paramétrage personnalisé par salon"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Paramétrage personnalisé par groupe"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Une erreur s’est produite lors de la mise à jour du paramètre de notification."</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"Tous les messages"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
@@ -66,7 +66,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_failed_fixing_configuration">"La configuration n’a pas été corrigée, veuillez réessayer."</string>
   <string name="screen_notification_settings_group_chats">"Discussions de groupe"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les groupes chiffrés, vous pourriez ne pas être notifié(e) dans certains groupes."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_mode_all">"Tous"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>

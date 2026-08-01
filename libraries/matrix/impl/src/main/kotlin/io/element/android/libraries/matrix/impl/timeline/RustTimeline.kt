@@ -163,6 +163,10 @@ class RustTimeline(
         .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
         .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
 
+    override val rawTimelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
+        .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
+        .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
+
     override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.sendReadReceipt(receiptType.toRustReceiptType(), eventId.value)

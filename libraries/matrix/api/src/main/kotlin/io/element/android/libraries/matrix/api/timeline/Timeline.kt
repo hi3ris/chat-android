@@ -65,6 +65,13 @@ interface Timeline : AutoCloseable {
 
     val timelineItems: Flow<List<MatrixTimelineItem>>
 
+    /**
+     * Raw timeline items without post-processing (loading indicators, room beginning markers).
+     * Backed directly by the Rust SDK diff flow (SharedFlow replay=1).
+     * Triggers the timeline subscription on collection, same as [timelineItems].
+     */
+    val rawTimelineItems: Flow<List<MatrixTimelineItem>>
+
     suspend fun sendMessage(
         body: String,
         htmlBody: String?,

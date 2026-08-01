@@ -57,14 +57,13 @@ fun ConfirmAccountProviderView(
         header = {
             IconTitleSubtitleMolecule(
                 modifier = Modifier.padding(top = 60.dp),
-                iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
+                iconStyle = BigIcon.Style.Default(CompoundIcons.LockSolid()),
                 title = stringResource(
                     id = if (state.isAccountCreation) {
                         R.string.screen_account_provider_signup_title
                     } else {
                         R.string.screen_account_provider_signin_title
                     },
-                    state.accountProvider.title
                 ),
                 subTitle = stringResource(
                     id = if (state.isAccountCreation) {

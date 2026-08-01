@@ -82,6 +82,9 @@ captures/
 #*.jks
 #*.keystore
 
+# Cle d'upload Play Store + ses mots de passe (Link) - JAMAIS commiter
+keystore.properties
+
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
 .cxx/
@@ -115,3 +118,10 @@ lint/tmp/
 .DS_Store
 
 checkouts/**
+
+# --- checkpoint kdodo exclusions (artefacts/config client) ---
+tools/matrix-rust-sdk-*/
+tools/matrix-rust-components-kotlin/
+tools/sdk/
+app/google-services.json
+*:Zone.Identifier

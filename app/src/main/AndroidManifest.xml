@@ -11,6 +11,9 @@
     <!-- To be able to install APK from the application -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <!-- To detect screen capture attempts (Android 14+) -->
+    <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
+
     <application
         android:name=".ElementXApplication"
         android:allowBackup="false"
@@ -72,7 +75,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data
                     android:host="open"
-                    android:scheme="elementx" />
+                    android:scheme="cdalink" />
             </intent-filter>
             <!--
               Oidc redirection
@@ -86,7 +89,8 @@
                 <data android:scheme="@string/login_redirect_scheme" />
             </intent-filter>
             <!--
-              Element web links
+              CDA Link web links
+              Matching asset file: https://link.cda.tg/.well-known/assetlinks.json
             -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -95,17 +99,11 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <!-- Note: we can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. -->
-                <!-- Matching asset file: https://app.element.io/.well-known/assetlinks.json -->
-                <data android:host="app.element.io" />
-                <!-- Matching asset file: https://develop.element.io/.well-known/assetlinks.json -->
-                <data android:host="develop.element.io" />
-                <!-- Matching asset file: https://staging.element.io/.well-known/assetlinks.json -->
-                <data android:host="staging.element.io" />
+                <data android:host="link.cda.tg" />
             </intent-filter>
             <!--
-              Element mobile links
-              Example: https://mobile.element.io/element/?account_provider=example.org&login_hint=mxid:@alice:example.org
+              CDA mobile links
+              Example: https://mobile.link.cda.tg/link/?account_provider=cda.tg&login_hint=mxid:@alice:cda.tg
             -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -114,9 +112,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <!-- Matching asset file: https://mobile.element.io/.well-known/assetlinks.json -->
-                <data android:host="mobile.element.io" />
-                <data android:path="/element/" />
+                <data android:host="mobile.link.cda.tg" />
+                <data android:path="/link/" />
             </intent-filter>
             <!--
               matrix.to links

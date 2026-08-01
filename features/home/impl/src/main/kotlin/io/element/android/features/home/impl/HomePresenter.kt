@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
+import io.element.android.features.home.impl.callhistory.CallHistoryPresenter
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.logout.api.direct.DirectLogoutState
@@ -44,6 +45,7 @@ class HomePresenter(
     private val indicatorService: IndicatorService,
     private val roomListPresenter: Presenter<RoomListState>,
     private val homeSpacesPresenter: Presenter<HomeSpacesState>,
+    private val callHistoryPresenter: CallHistoryPresenter,
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val sessionStore: SessionStore,
@@ -66,6 +68,7 @@ class HomePresenter(
         val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         val roomListState = roomListPresenter.present()
         val homeSpacesState = homeSpacesPresenter.present()
+        val callHistoryState = callHistoryPresenter.present()
         var currentHomeNavigationBarItemOrdinal by rememberSaveable { mutableIntStateOf(HomeNavigationBarItem.Chats.ordinal) }
         val currentHomeNavigationBarItem by remember {
             derivedStateOf {
@@ -108,6 +111,7 @@ class HomePresenter(
             currentHomeNavigationBarItem = currentHomeNavigationBarItem,
             roomListState = roomListState,
             homeSpacesState = homeSpacesState,
+            callHistoryState = callHistoryState,
             snackbarMessage = snackbarMessage,
             canReportBug = canReportBug,
             directLogoutState = directLogoutState,

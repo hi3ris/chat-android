@@ -25,7 +25,7 @@ class DefaultOnBoardingLogoResIdProvider(
     @SuppressLint("DiscouragedApi")
     override fun get(): Int? {
         val resId = context.resources
-            .getIdentifier("onboarding_logo", "drawable", context.packageName)
+            .getIdentifier("cda_logo", "drawable", context.packageName)
             .takeIf { it != 0 }
         return resId
     }

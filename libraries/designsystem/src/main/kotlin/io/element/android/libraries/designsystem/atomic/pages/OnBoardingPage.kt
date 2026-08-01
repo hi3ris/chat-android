@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.designsystem.atomic.pages
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +18,10 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -49,14 +48,19 @@ fun OnBoardingPage(
         modifier = modifier
             .fillMaxSize()
     ) {
-        // BG
+        // BG — dégradé CDA : vert #006A4E en haut → couleur de fond du thème en bas
         if (renderBackground) {
-            Image(
+            Box(
                 modifier = Modifier
-                    .fillMaxSize(),
-                painter = painterResource(id = R.drawable.onboarding_bg),
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFF006A4E),
+                                ElementTheme.colors.bgCanvasDefault,
+                            )
+                        )
+                    )
             )
         }
         Column(

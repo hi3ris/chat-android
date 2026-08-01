@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
@@ -36,6 +37,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun CallMenuItem(
     roomCallState: RoomCallState,
     onJoinCallClick: () -> Unit,
+    onJoinAudioCallClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (roomCallState) {
@@ -45,7 +47,8 @@ internal fun CallMenuItem(
         is RoomCallState.StandBy -> {
             StandByCallMenuItem(
                 roomCallState = roomCallState,
-                onJoinCallClick = onJoinCallClick,
+                onJoinVideoCallClick = onJoinCallClick,
+                onJoinAudioCallClick = onJoinAudioCallClick,
                 modifier = modifier,
             )
         }
@@ -62,18 +65,31 @@ internal fun CallMenuItem(
 @Composable
 private fun StandByCallMenuItem(
     roomCallState: RoomCallState.StandBy,
-    onJoinCallClick: () -> Unit,
+    onJoinAudioCallClick: () -> Unit,
+    onJoinVideoCallClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    IconButton(
-        modifier = modifier,
-        onClick = onJoinCallClick,
-        enabled = roomCallState.canStartCall,
-    ) {
-        Icon(
-            imageVector = CompoundIcons.VideoCallSolid(),
-            contentDescription = stringResource(CommonStrings.a11y_start_call),
-        )
+    Row(modifier = modifier) {
+        IconButton(
+            onClick = onJoinAudioCallClick,
+            enabled = roomCallState.canStartCall,
+        ) {
+            Icon(
+                imageVector = CompoundIcons.VoiceCallSolid(),
+                tint = ElementTheme.colors.iconPrimary,
+                contentDescription = stringResource(CommonStrings.a11y_start_call),
+            )
+        }
+        IconButton(
+            onClick = onJoinVideoCallClick,
+            enabled = roomCallState.canStartCall,
+        ) {
+            Icon(
+                imageVector = CompoundIcons.VideoCallSolid(),
+                tint = ElementTheme.colors.iconPrimary,
+                contentDescription = stringResource(CommonStrings.a11y_start_call),
+            )
+        }
     }
 }
 
@@ -97,6 +113,7 @@ private fun OnGoingCallMenuItem(
             Icon(
                 modifier = Modifier.size(20.dp),
                 imageVector = CompoundIcons.VideoCallSolid(),
+                tint = ElementTheme.colors.bgCanvasDefault,
                 contentDescription = null
             )
             Spacer(Modifier.width(8.dp))
@@ -119,6 +136,7 @@ internal fun CallMenuItemPreview(
 ) = ElementPreview {
     CallMenuItem(
         roomCallState = roomCallState,
-        onJoinCallClick = {}
+        onJoinCallClick = {},
+        onJoinAudioCallClick = {},
     )
 }

@@ -228,6 +228,7 @@ class CallScreenPresenter(
                         clientId = UUID.randomUUID().toString(),
                         languageTag = languageTag,
                         theme = theme,
+                        audioOnly = inputs.audioOnly,
                     ).getOrThrow()
                     callWidgetDriver.value = result.driver
                     Timber.d("Call widget driver initialized for sessionId: ${inputs.sessionId}, roomId: ${inputs.roomId}")

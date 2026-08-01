@@ -19,6 +19,7 @@ interface CallWidgetProvider {
         clientId: String,
         languageTag: String?,
         theme: String?,
+        audioOnly: Boolean = false,
     ): Result<GetWidgetResult>
 
     data class GetWidgetResult(

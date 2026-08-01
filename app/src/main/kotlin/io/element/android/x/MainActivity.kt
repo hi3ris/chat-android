@@ -8,7 +8,9 @@
 
 package io.element.android.x
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -50,13 +52,13 @@ private val loggerTag = LoggerTag("MainActivity")
 class MainActivity : NodeActivity() {
     private lateinit var mainNode: MainNode
     private lateinit var appBindings: AppBindings
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
         installSplashScreen()
         super.onCreate(savedInstanceState)
         appBindings = bindings()
         setupLockManagement(appBindings.lockScreenService(), appBindings.lockScreenEntryPoint())
+        setupScreenCaptureDetection()
         enableEdgeToEdge()
         setContent {
             MainContent(appBindings)
@@ -166,5 +168,17 @@ class MainActivity : NodeActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Timber.tag(loggerTag.value).w("onDestroy")
+    }
+
+    private fun setupScreenCaptureDetection() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            val notifier = appBindings.screenCaptureNotifier()
+            val callback = Activity.ScreenCaptureCallback {
+                lifecycleScope.launch {
+                    notifier.onScreenCaptureDetected()
+                }
+            }
+            registerScreenCaptureCallback(mainExecutor, callback)
+        }
     }
 }

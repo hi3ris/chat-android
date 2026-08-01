@@ -20,6 +20,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.di.identifiers.SentrySdkDsn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.platform.InitPlatformService
+import io.element.android.libraries.matrix.api.screencapture.ScreenCaptureNotifier
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
@@ -51,4 +52,6 @@ interface AppBindings {
     fun buildMeta(): BuildMeta
 
     fun sentrySdkDsn(): SentrySdkDsn?
+
+    fun screenCaptureNotifier(): ScreenCaptureNotifier
 }

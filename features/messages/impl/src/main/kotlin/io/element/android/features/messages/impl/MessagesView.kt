@@ -131,6 +131,7 @@ fun MessagesView(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onJoinAudioCallClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
@@ -229,6 +230,7 @@ fun MessagesView(
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                             onJoinCallClick = onJoinCallClick,
+                            onJoinAudioCallClick = onJoinAudioCallClick,
                         )
                     }
                 },
@@ -268,6 +270,7 @@ fun MessagesView(
                             },
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                             onJoinCallClick = onJoinCallClick,
+                            onJoinAudioCallClick = onJoinAudioCallClick,
                             onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                             knockRequestsBannerView = knockRequestsBannerView,
                         )
@@ -424,6 +427,7 @@ private fun MessagesViewContent(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onJoinAudioCallClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
@@ -592,6 +596,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
+        onJoinAudioCallClick = {},
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
@@ -646,6 +651,7 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
+        onJoinAudioCallClick = {},
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},

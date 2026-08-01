@@ -50,7 +50,6 @@ fun TimelineItemTextView(
         else -> ElementTheme.typography.fontBodyLgRegular
     }
     CompositionLocalProvider(
-        LocalContentColor provides ElementTheme.colors.textPrimary,
         LocalTextStyle provides textStyle
     ) {
         val text = getTextWithResolvedMentions(content)

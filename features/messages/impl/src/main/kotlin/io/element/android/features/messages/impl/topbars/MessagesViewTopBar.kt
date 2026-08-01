@@ -8,15 +8,21 @@
 
 package io.element.android.features.messages.impl.topbars
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -67,11 +73,13 @@ internal fun MessagesViewTopBar(
     sharedHistoryIcon: SharedHistoryIcon,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onJoinAudioCallClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Column(modifier = modifier) {
     TopAppBar(
-        modifier = modifier,
+        modifier = Modifier,
         navigationIcon = {
             BackButton(onClick = onBackClick)
         },
@@ -130,11 +138,18 @@ internal fun MessagesViewTopBar(
             CallMenuItem(
                 roomCallState = roomCallState,
                 onJoinCallClick = onJoinCallClick,
+                onJoinAudioCallClick = onJoinAudioCallClick,
             )
             Spacer(Modifier.width(8.dp))
         },
         windowInsets = WindowInsets(0.dp)
     )
+    Row(modifier = Modifier.fillMaxWidth().height(3.dp)) {
+        Box(modifier = Modifier.weight(1f).fillMaxHeight().background(Color(0xFFD21034)))
+        Box(modifier = Modifier.weight(1f).fillMaxHeight().background(Color(0xFF006A4E)))
+        Box(modifier = Modifier.weight(1f).fillMaxHeight().background(Color(0xFFFFCE00)))
+    }
+    } // end Column
 }
 
 @Composable
@@ -196,6 +211,7 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         sharedHistoryIcon = sharedHistoryIcon,
         onRoomDetailsClick = {},
         onJoinCallClick = {},
+        onJoinAudioCallClick = {},
         onBackClick = {},
     )
     Column {

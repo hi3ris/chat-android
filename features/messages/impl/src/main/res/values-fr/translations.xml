@@ -38,11 +38,11 @@
   <string name="screen_room_attachment_source_location">"Position"</string>
   <string name="screen_room_attachment_source_poll">"Sondage"</string>
   <string name="screen_room_attachment_text_formatting">"Formatage du texte"</string>
-  <string name="screen_room_encrypted_history_banner">"L’historique des messages n’est actuellement pas disponible dans ce salon"</string>
+  <string name="screen_room_encrypted_history_banner">"L’historique des messages n’est actuellement pas disponible dans ce groupe"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"L’historique de la discussion n’est pas disponible. Vérifiez cette session pour accéder à l’historique."</string>
   <string name="screen_room_invite_again_alert_message">"Souhaitez-vous inviter l’ancien membre à revenir ?"</string>
   <string name="screen_room_invite_again_alert_title">"Vous êtes seul dans cette discussion"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Notifier tout le salon"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Notifier tout le groupe"</string>
   <string name="screen_room_mentions_at_room_title">"Tout le monde"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Envoyer à nouveau"</string>
   <string name="screen_room_retry_send_menu_title">"Votre message n’a pas pu être envoyé"</string>
@@ -52,7 +52,7 @@
   <string name="screen_room_timeline_legacy_call">"Appel non pris en charge. Demandez à l’appelant s’il peut utiliser la nouvelle application Element X pour vous appeler."</string>
   <string name="screen_room_timeline_less_reactions">"Afficher moins"</string>
   <string name="screen_room_timeline_message_copied">"Message copié"</string>
-  <string name="screen_room_timeline_no_permission_to_post">"Vous n’êtes pas autorisé à publier dans ce salon"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Vous n’êtes pas autorisé à publier dans ce groupe"</string>
   <plurals name="screen_room_timeline_reaction_a11y">
     <item quantity="one">"%1$d membre a réagi avec %2$s"</item>
     <item quantity="other">"%1$d membres ont réagi avec %2$s"</item>
@@ -67,13 +67,13 @@
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Afficher le résumé des réactions"</string>
   <string name="screen_room_timeline_read_marker_title">"Nouveau"</string>
   <plurals name="screen_room_timeline_state_changes">
-    <item quantity="one">"%1$d changement dans le salon"</item>
-    <item quantity="other">"%1$d changements dans le salon"</item>
+    <item quantity="one">"%1$d changement dans le groupe"</item>
+    <item quantity="other">"%1$d changements dans le groupe"</item>
   </plurals>
-  <string name="screen_room_timeline_tombstoned_room_action">"Aller dans le nouveau salon"</string>
-  <string name="screen_room_timeline_tombstoned_room_message">"Ce salon a été remplacé et n’est plus actif"</string>
+  <string name="screen_room_timeline_tombstoned_room_action">"Aller dans le nouveau groupe"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Ce groupe a été remplacé et n’est plus actif"</string>
   <string name="screen_room_timeline_upgraded_room_action">"Voir les anciens messages"</string>
-  <string name="screen_room_timeline_upgraded_room_message">"Ce salon est la continuation du salon précédent"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Ce groupe est la continuation du groupe précédent"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s et %3$d autre"</item>
     <item quantity="other">"%1$s, %2$s et %3$d autres"</item>

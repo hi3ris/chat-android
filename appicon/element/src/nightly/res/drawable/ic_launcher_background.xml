@@ -1,10 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Kdodo app icon background (nightly) — Togolese flag
+    5 horizontal stripes (green/yellow alternating) + red canton + white star
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Stripe 1: Green (0–21.6) -->
+    <path android:fillColor="#006A4E" android:pathData="M0,0 H108 V21.6 H0 Z" />
+    <!-- Stripe 2: Yellow (21.6–43.2) -->
+    <path android:fillColor="#FFCE00" android:pathData="M0,21.6 H108 V43.2 H0 Z" />
+    <!-- Stripe 3: Green (43.2–64.8) -->
+    <path android:fillColor="#006A4E" android:pathData="M0,43.2 H108 V64.8 H0 Z" />
+    <!-- Stripe 4: Yellow (64.8–86.4) -->
+    <path android:fillColor="#FFCE00" android:pathData="M0,64.8 H108 V86.4 H0 Z" />
+    <!-- Stripe 5: Green (86.4–108) -->
+    <path android:fillColor="#006A4E" android:pathData="M0,86.4 H108 V108 H0 Z" />
+
+    <!-- Red canton: 2/5 width × 3/5 height = 43.2 × 64.8 -->
+    <path android:fillColor="#D21034" android:pathData="M0,0 H43.2 V64.8 H0 Z" />
+
+    <!-- White 5-pointed star centered in canton (21.6, 32.4), outer R=11, inner r=4.4 -->
     <path
-        android:fillColor="#07007E"
-        android:fillType="evenOdd"
-        android:pathData="m0,0h108v108h-108z" />
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M21.6,21.4
+            L24.19,28.84 L32.06,29
+            L25.78,33.76 L28.07,41.3
+            L21.6,36.8
+            L15.13,41.3 L17.42,33.76
+            L11.14,29 L19.01,28.84
+            Z" />
+
 </vector>

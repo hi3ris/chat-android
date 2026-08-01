@@ -41,6 +41,7 @@ import dev.chrisbanes.haze.materials.HazeMaterials
 import dev.chrisbanes.haze.rememberHazeState
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.home.impl.callhistory.CallHistoryView
 import io.element.android.features.home.impl.components.HomeTopBar
 import io.element.android.features.home.impl.components.RoomListContentView
 import io.element.android.features.home.impl.components.RoomListMenuAction
@@ -169,6 +170,7 @@ private fun HomeScaffold(
 
     val hazeState = rememberHazeState()
     val roomsLazyListState = rememberLazyListState()
+    val callsLazyListState = rememberLazyListState()
     val spacesLazyListState = rememberLazyListState()
 
     Scaffold(
@@ -208,6 +210,7 @@ private fun HomeScaffold(
                         if (item == state.currentHomeNavigationBarItem) {
                             val lazyListStateTarget = when (item) {
                                 HomeNavigationBarItem.Chats -> roomsLazyListState
+                                HomeNavigationBarItem.Calls -> callsLazyListState
                                 HomeNavigationBarItem.Spaces -> spacesLazyListState
                             }
                             coroutineScope.launch {
@@ -266,6 +269,27 @@ private fun HomeScaffold(
                             .hazeSource(state = hazeState)
                     )
                     SpaceFiltersView(roomListState.spaceFiltersState)
+                }
+                HomeNavigationBarItem.Calls -> {
+                    CallHistoryView(
+                        state = state.callHistoryState,
+                        onRoomClick = onRoomClick,
+                        lazyListState = callsLazyListState,
+                        contentPadding = PaddingValues(
+                            bottom = 80.dp,
+                            top = padding.calculateTopPadding(),
+                        ),
+                        modifier = Modifier
+                            .padding(
+                                PaddingValues(
+                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                    bottom = padding.calculateBottomPadding(),
+                                )
+                            )
+                            .consumeWindowInsets(padding)
+                            .hazeSource(state = hazeState),
+                    )
                 }
                 HomeNavigationBarItem.Spaces -> {
                     HomeSpacesView(

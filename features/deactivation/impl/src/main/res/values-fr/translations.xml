@@ -7,8 +7,8 @@
   <string name="screen_deactivate_account_description_bold_part">"irréversible"</string>
   <string name="screen_deactivate_account_list_item_1">"%1$s votre compte (vous ne pourrez plus vous reconnecter et votre identifiant ne pourra pas être réutilisé)."</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"Désactiver définitivement"</string>
-  <string name="screen_deactivate_account_list_item_2">"Vous retirer de tous les salons et toutes les discussions."</string>
+  <string name="screen_deactivate_account_list_item_2">"Vous retirer de tous les groupes et toutes les discussions."</string>
   <string name="screen_deactivate_account_list_item_3">"Supprimer les informations de votre compte du serveur d’identité."</string>
-  <string name="screen_deactivate_account_list_item_4">"Rendre vos messages invisibles aux futurs membres des salons si vous choisissez de les supprimer. Vos messages seront toujours visibles pour les utilisateurs qui les ont déjà récupérés."</string>
+  <string name="screen_deactivate_account_list_item_4">"Rendre vos messages invisibles aux futurs membres des groupes si vous choisissez de les supprimer. Vos messages seront toujours visibles pour les utilisateurs qui les ont déjà récupérés."</string>
   <string name="screen_deactivate_account_title">"Désactiver le compte"</string>
 </resources>

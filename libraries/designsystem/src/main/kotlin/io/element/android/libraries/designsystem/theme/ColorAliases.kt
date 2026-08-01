@@ -38,15 +38,21 @@ val SemanticColors.unreadIndicator
 val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
+// CDA green for sent bubbles
 val SemanticColors.messageFromMeBackground
-    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray500
+    get() = if (isLight) Color(0xFF006A4E) else Color(0xFF007A5C)
 
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
+// Apple-style neutral for received bubbles
 val SemanticColors.messageFromOtherBackground
-    get() = if (isLight) LightColorTokens.colorGray300 else DarkColorTokens.colorGray400
+    get() = if (isLight) Color(0xFFF2F2F7) else Color(0xFF2C2C2E)
+
+// Text color inside sent bubbles (always white on green background)
+val SemanticColors.messageFromMeTextColor
+    get() = Color.White
+
+// Text color inside received bubbles
+val SemanticColors.messageFromOtherTextColor
+    get() = textPrimary
 
 // This color is not present in Semantic color, so put hard-coded value for now
 @OptIn(CoreColorToken::class)

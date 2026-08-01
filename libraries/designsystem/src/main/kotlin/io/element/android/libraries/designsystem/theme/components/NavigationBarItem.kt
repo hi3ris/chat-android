@@ -46,10 +46,10 @@ fun RowScope.NavigationBarItem(
 object ElementNavigationBarItemDefaults {
     @Composable
     fun colors() = NavigationBarItemDefaults.colors().copy(
-        selectedIconColor = ElementTheme.colors.iconPrimary,
+        selectedIconColor = Color(0xFF006A4E),
         selectedTextColor = ElementTheme.colors.textPrimary,
-        unselectedIconColor = ElementTheme.colors.iconTertiary,
-        unselectedTextColor = ElementTheme.colors.textDisabled,
+        unselectedIconColor = ElementTheme.colors.iconSecondary,
+        unselectedTextColor = ElementTheme.colors.textSecondary,
         selectedIndicatorColor = Color.Transparent,
     )
 }

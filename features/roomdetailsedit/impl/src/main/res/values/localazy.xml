@@ -2,6 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_details_edit_room_title">"Edit details"</string>
   <string name="screen_room_details_edition_error">"There was an unknown error and the information couldn\'t be changed."</string>
-  <string name="screen_room_details_edition_error_title">"Unable to update room"</string>
+  <string name="screen_room_details_edition_error_title">"Unable to update group"</string>
   <string name="screen_room_details_updating_room">"Updating details…"</string>
 </resources>

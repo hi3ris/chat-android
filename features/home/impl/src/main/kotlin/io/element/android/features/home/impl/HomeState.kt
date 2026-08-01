@@ -8,6 +8,7 @@
 
 package io.element.android.features.home.impl
 
+import io.element.android.features.home.impl.callhistory.CallHistoryState
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
@@ -27,6 +28,7 @@ data class HomeState(
     val currentHomeNavigationBarItem: HomeNavigationBarItem,
     val roomListState: RoomListState,
     val homeSpacesState: HomeSpacesState,
+    val callHistoryState: CallHistoryState,
     val snackbarMessage: SnackbarMessage?,
     val canReportBug: Boolean,
     val directLogoutState: DirectLogoutState,
@@ -35,5 +37,6 @@ data class HomeState(
     val isBackHandlerEnabled = currentHomeNavigationBarItem != HomeNavigationBarItem.Chats || roomListState.spaceFiltersState is SpaceFiltersState.Selected
     val displayActions = currentHomeNavigationBarItem == HomeNavigationBarItem.Chats
     val displayRoomListFilters = currentHomeNavigationBarItem == HomeNavigationBarItem.Chats && roomListState.displayFilters
-    val showNavigationBar = homeSpacesState.canCreateSpaces || homeSpacesState.spaceRooms.isNotEmpty()
+    // Always show the nav bar since we always have at least Chats + Calls tabs
+    val showNavigationBar = true
 }

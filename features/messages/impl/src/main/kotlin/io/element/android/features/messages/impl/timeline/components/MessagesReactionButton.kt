@@ -64,13 +64,13 @@ fun MessagesReactionButton(
     modifier: Modifier = Modifier,
 ) {
     val buttonColor = if (content.isHighlighted) {
-        ElementTheme.colors.bgSubtlePrimary
+        Color(0xFF006A4E).copy(alpha = if (ElementTheme.isLightTheme) 0.12f else 0.20f)
     } else {
         ElementTheme.colors.bgSubtleSecondary
     }
 
     val borderColor = if (content.isHighlighted) {
-        ElementTheme.colors.borderInteractivePrimary
+        Color(0xFF006A4E).copy(alpha = 0.60f)
     } else {
         buttonColor
     }

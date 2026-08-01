@@ -47,6 +47,7 @@ internal fun TimelineItemCallNotifyView(
     roomCallState: RoomCallState,
     onLongClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
+    onJoinAudioCallClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -98,6 +99,7 @@ internal fun TimelineItemCallNotifyView(
             CallMenuItem(
                 roomCallState = roomCallState,
                 onJoinCallClick = onJoinCallClick,
+                onJoinAudioCallClick = onJoinAudioCallClick,
             )
         } else {
             Text(

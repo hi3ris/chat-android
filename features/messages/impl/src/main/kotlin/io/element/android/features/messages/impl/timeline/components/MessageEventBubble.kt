@@ -17,17 +17,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -46,12 +52,14 @@ import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.messageFromMeBackground
+import io.element.android.libraries.designsystem.theme.messageFromMeTextColor
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
+import io.element.android.libraries.designsystem.theme.messageFromOtherTextColor
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 
-private val BUBBLE_RADIUS = 12.dp
+private val BUBBLE_RADIUS = 18.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
 
 private val MIN_BUBBLE_WIDTH = 80.dp
@@ -80,10 +88,14 @@ fun MessageEventBubble(
 
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine)
+    val glassShimmerColors = MessageEventBubbleDefaults.glassShimmerColors(state.isMine)
+    val glassBorderColor = MessageEventBubbleDefaults.glassBorderColor(state.isMine)
+    val textColor = MessageEventBubbleDefaults.textColor(state.isMine)
     val bubbleShape = remember(state) { MessageEventBubbleDefaults.shape(state.cutTopStart, state.groupPosition, state.isMine) }
+    val layoutDirection = LocalLayoutDirection.current
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val isRtl = layoutDirection == LayoutDirection.Rtl
     BoxWithConstraints(
         modifier = modifier
             .graphicsLayer {
@@ -92,8 +104,30 @@ fun MessageEventBubble(
                 compositingStrategy = CompositingStrategy.Offscreen
             }
             .drawWithContent {
+                // 1. Base background
                 drawRect(backgroundBubbleColor)
+                // 2. Liquid glass shimmer — limité au tiers supérieur de la bulle
+                val shimmerBrush = Brush.verticalGradient(
+                    colors = glassShimmerColors,
+                    startY = 0f,
+                    endY = size.height * 0.45f,
+                )
+                drawRect(brush = shimmerBrush)
+                // 3. Actual content
                 drawContent()
+                // 4. Glass border — suit exactement la forme de la bulle
+                val outline = bubbleShape.createOutline(size, layoutDirection, this)
+                val borderPath = when (outline) {
+                    is Outline.Rectangle -> Path().apply { addRect(outline.rect) }
+                    is Outline.Rounded -> Path().apply { addRoundRect(outline.roundRect) }
+                    is Outline.Generic -> outline.path
+                }
+                drawPath(
+                    path = borderPath,
+                    color = glassBorderColor,
+                    style = Stroke(width = 1.dp.toPx()),
+                )
+                // 5. Cut avatar corner
                 if (state.cutTopStart) {
                     drawCircle(
                         color = Color.Black,
@@ -106,22 +140,22 @@ fun MessageEventBubble(
                     )
                 }
             },
-        // Need to set the contentAlignment again (it's already set in TimelineItemEventRow), for the case
-        // when content width is low.
         contentAlignment = if (state.isMine) Alignment.CenterEnd else Alignment.CenterStart
     ) {
-        Box(
-            modifier = Modifier
-                .testTag(TestTags.messageBubble)
-                .widthIn(
-                    min = MIN_BUBBLE_WIDTH,
-                    max = (constraints.maxWidth * MessageEventBubbleDefaults.BUBBLE_WIDTH_RATIO)
-                        .toInt()
-                        .toDp()
-                )
-                .then(clickableModifier),
-            content = content,
-        )
+        CompositionLocalProvider(LocalContentColor provides textColor) {
+            Box(
+                modifier = Modifier
+                    .testTag(TestTags.messageBubble)
+                    .widthIn(
+                        min = MIN_BUBBLE_WIDTH,
+                        max = (constraints.maxWidth * MessageEventBubbleDefaults.BUBBLE_WIDTH_RATIO)
+                            .toInt()
+                            .toDp()
+                    )
+                    .then(clickableModifier),
+                content = content,
+            )
+        }
     }
 }
 
@@ -160,6 +194,41 @@ object MessageEventBubbleDefaults {
             ElementTheme.colors.messageFromMeBackground
         } else {
             ElementTheme.colors.messageFromOtherBackground
+        }
+    }
+
+    @Composable
+    fun textColor(isMine: Boolean): Color {
+        return if (isMine) {
+            ElementTheme.colors.messageFromMeTextColor
+        } else {
+            ElementTheme.colors.messageFromOtherTextColor
+        }
+    }
+
+    fun glassShimmerColors(isMine: Boolean): List<Color> {
+        return if (isMine) {
+            listOf(
+                Color.White.copy(alpha = 0.18f),
+                Color.White.copy(alpha = 0.06f),
+                Color.Transparent,
+            )
+        } else {
+            listOf(
+                Color.White.copy(alpha = 0.60f),
+                Color.White.copy(alpha = 0.12f),
+                Color.Transparent,
+            )
+        }
+    }
+
+    @Composable
+    fun glassBorderColor(isMine: Boolean): Color {
+        return if (isMine) {
+            Color.White.copy(alpha = 0.22f)
+        } else {
+            if (ElementTheme.isLightTheme) Color.White.copy(alpha = 0.70f)
+            else Color.White.copy(alpha = 0.12f)
         }
     }
 

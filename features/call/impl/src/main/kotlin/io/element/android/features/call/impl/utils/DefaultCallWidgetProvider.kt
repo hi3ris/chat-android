@@ -35,6 +35,7 @@ class DefaultCallWidgetProvider(
         clientId: String,
         languageTag: String?,
         theme: String?,
+        audioOnly: Boolean,
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatchingExceptions {
         val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
         val room = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
@@ -52,12 +53,13 @@ class DefaultCallWidgetProvider(
             direct = room.isDm(),
             hasActiveCall = roomInfo.hasRoomCall,
         )
-        val callUrl = room.generateWidgetWebViewUrl(
+        val rawCallUrl = room.generateWidgetWebViewUrl(
             widgetSettings = widgetSettings,
             clientId = clientId,
             languageTag = languageTag,
             theme = theme,
         ).getOrThrow()
+        val callUrl = if (audioOnly) "$rawCallUrl&audioOnly=true" else rawCallUrl
 
         val driver = room.getWidgetDriver(widgetSettings).getOrThrow()
 

@@ -6,8 +6,7 @@
   ~ Please see LICENSE files in the repository root for full details.
   -->
 <resources>
-    <!-- Must be equal to DarkColorTokens.colorThemeBg -->
-    <color name="splashscreen_bg_dark">#FF101317</color>
-    <!-- Must be equal to LightColorTokens.colorThemeBg -->
-    <color name="splashscreen_bg_light">#FFFFFFFF</color>
+    <!-- CDA brand green — splash background -->
+    <color name="splashscreen_bg_dark">#FF006A4E</color>
+    <color name="splashscreen_bg_light">#FF006A4E</color>
 </resources>

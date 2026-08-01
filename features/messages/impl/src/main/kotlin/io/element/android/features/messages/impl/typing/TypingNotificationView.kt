@@ -61,7 +61,7 @@ fun TypingNotificationView(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.colors.textSecondary,
+            color = if (ElementTheme.isLightTheme) ElementTheme.colors.textActionAccent else ElementTheme.colors.textSecondary,
         )
     }
 

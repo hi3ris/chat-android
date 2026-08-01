@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl
 
 import android.os.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -69,6 +70,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.screencapture.ScreenCaptureNotifier
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -122,6 +124,7 @@ class MessagesPresenter(
     private val addRecentEmoji: AddRecentEmoji,
     private val markAsFullyRead: MarkAsFullyRead,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
+    private val screenCaptureNotifier: ScreenCaptureNotifier,
 ) : Presenter<MessagesState> {
     @AssistedFactory
     interface Factory {
@@ -175,6 +178,13 @@ class MessagesPresenter(
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
+        DisposableEffect(Unit) {
+            screenCaptureNotifier.setActiveTimeline(room.liveTimeline)
+            onDispose {
+                screenCaptureNotifier.setActiveTimeline(null)
+            }
+        }
+
         LaunchedEffect(Unit) {
             // Remove the unread flag on entering but don't send read receipts
             // as those will be handled by the timeline.
