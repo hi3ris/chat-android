@@ -34,4 +34,24 @@ interface EncryptedPinCodeStorage {
      * Returns whether the PIN code is stored or not.
      */
     fun hasPinCode(): Flow<Boolean>
+
+    /**
+     * Returns the encrypted duress (panic) PIN code, or null if not set.
+     */
+    suspend fun getDuressEncryptedCode(): String?
+
+    /**
+     * Saves the encrypted duress (panic) PIN code.
+     */
+    suspend fun saveDuressEncryptedPinCode(pinCode: String)
+
+    /**
+     * Deletes the duress (panic) PIN code.
+     */
+    suspend fun deleteDuressEncryptedPinCode()
+
+    /**
+     * Returns whether a duress (panic) PIN code is stored or not.
+     */
+    fun hasDuressPinCode(): Flow<Boolean>
 }

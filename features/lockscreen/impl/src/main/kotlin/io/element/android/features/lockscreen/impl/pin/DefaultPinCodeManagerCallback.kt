@@ -14,4 +14,6 @@ open class DefaultPinCodeManagerCallback : PinCodeManager.Callback {
     override fun onPinCodeCreated() = Unit
 
     override fun onPinCodeRemoved() = Unit
+
+    override fun onDuressPinCodeCreated() = Unit
 }

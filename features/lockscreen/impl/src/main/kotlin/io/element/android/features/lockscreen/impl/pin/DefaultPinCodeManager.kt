@@ -85,4 +85,30 @@ class DefaultPinCodeManager(
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return lockScreenStore.getRemainingPinCodeAttemptsNumber()
     }
+
+    override fun hasDuressPinCode(): Flow<Boolean> {
+        return lockScreenStore.hasDuressPinCode()
+    }
+
+    override suspend fun createDuressPinCode(pinCode: String) {
+        val secretKey = secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, false)
+        val encryptedPinCode = encryptionDecryptionService.encrypt(secretKey, pinCode.toByteArray()).toBase64()
+        lockScreenStore.saveDuressEncryptedPinCode(encryptedPinCode)
+        callbacks.forEach { it.onDuressPinCodeCreated() }
+    }
+
+    override suspend fun verifyDuressPinCode(pinCode: String): Boolean {
+        val encryptedPinCode = lockScreenStore.getDuressEncryptedCode() ?: return false
+        return try {
+            val secretKey = secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, false)
+            val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
+            decryptedPinCode.contentEquals(pinCode.toByteArray())
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    override suspend fun deleteDuressPinCode() {
+        lockScreenStore.deleteDuressEncryptedPinCode()
+    }
 }

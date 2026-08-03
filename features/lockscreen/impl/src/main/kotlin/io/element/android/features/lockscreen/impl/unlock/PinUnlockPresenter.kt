@@ -79,7 +79,15 @@ class PinUnlockPresenter(
 
         LaunchedEffect(pinEntry) {
             if (pinEntry.isComplete()) {
-                val isVerified = pinCodeManager.verifyPinCode(pinEntry.toText())
+                val enteredPin = pinEntry.toText()
+                // Duress (panic) code: if the entered PIN is the duress code, silently
+                // sign out and wipe the local session instead of unlocking.
+                if (pinCodeManager.verifyDuressPinCode(enteredPin)) {
+                    pinEntryState.value = pinEntry.clear()
+                    coroutineScope.signOut(signOutAction)
+                    return@LaunchedEffect
+                }
+                val isVerified = pinCodeManager.verifyPinCode(enteredPin)
                 if (!isVerified) {
                     pinEntryState.value = pinEntry.clear()
                     showWrongPinTitle = true

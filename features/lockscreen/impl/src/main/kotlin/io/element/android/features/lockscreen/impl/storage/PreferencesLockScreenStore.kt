@@ -31,6 +31,7 @@ class PreferencesLockScreenStore(
     private val pinCodeKey = stringPreferencesKey("encoded_pin_code")
     private val remainingAttemptsKey = intPreferencesKey("remaining_pin_code_attempts")
     private val biometricUnlockKey = booleanPreferencesKey("biometric_unlock_enabled")
+    private val duressPinCodeKey = stringPreferencesKey("encoded_duress_pin_code")
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return dataStore.data.map { preferences ->
@@ -85,6 +86,30 @@ class PreferencesLockScreenStore(
     override suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean) {
         dataStore.edit { preferences ->
             preferences[biometricUnlockKey] = isAllowed
+        }
+    }
+
+    override suspend fun getDuressEncryptedCode(): String? {
+        return dataStore.data.map { preferences ->
+            preferences[duressPinCodeKey]
+        }.first()
+    }
+
+    override suspend fun saveDuressEncryptedPinCode(pinCode: String) {
+        dataStore.edit { preferences ->
+            preferences[duressPinCodeKey] = pinCode
+        }
+    }
+
+    override suspend fun deleteDuressEncryptedPinCode() {
+        dataStore.edit { preferences ->
+            preferences.remove(duressPinCodeKey)
+        }
+    }
+
+    override fun hasDuressPinCode(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[duressPinCodeKey] != null
         }
     }
 

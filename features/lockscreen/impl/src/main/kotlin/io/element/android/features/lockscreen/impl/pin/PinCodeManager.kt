@@ -33,6 +33,11 @@ interface PinCodeManager {
          * Called when the pin code is removed.
          */
         fun onPinCodeRemoved()
+
+        /**
+         * Called when the duress (panic) pin code is created.
+         */
+        fun onDuressPinCodeCreated()
     }
 
     /**
@@ -75,4 +80,25 @@ interface PinCodeManager {
      * @return the number of remaining attempts before the pin code is blocked.
      */
     suspend fun getRemainingPinCodeAttemptsNumber(): Int
+
+    /**
+     * @return true if a duress (panic) pin code is available.
+     */
+    fun hasDuressPinCode(): Flow<Boolean>
+
+    /**
+     * Creates a new encrypted duress (panic) pin code. Entering it at unlock
+     * silently signs the user out and wipes the local session.
+     */
+    suspend fun createDuressPinCode(pinCode: String)
+
+    /**
+     * @return true if the given code matches the duress (panic) pin code.
+     */
+    suspend fun verifyDuressPinCode(pinCode: String): Boolean
+
+    /**
+     * Deletes the previously created duress pin code.
+     */
+    suspend fun deleteDuressPinCode()
 }
