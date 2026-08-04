@@ -24,10 +24,15 @@ fun aLockScreenSettingsState(
     isBiometricEnabled: Boolean = false,
     showRemovePinConfirmation: Boolean = false,
     showToggleBiometric: Boolean = true,
+    hasDuressPin: Boolean = false,
+    showDuressPinDialog: Boolean = false,
 ) = LockScreenSettingsState(
     showRemovePinOption = isLockMandatory,
     isBiometricEnabled = isBiometricEnabled,
     showRemovePinConfirmation = showRemovePinConfirmation,
     showToggleBiometric = showToggleBiometric,
+    hasDuressPin = hasDuressPin,
+    showDuressPinDialog = showDuressPinDialog,
+    pinSize = 4,
     eventSink = {}
 )

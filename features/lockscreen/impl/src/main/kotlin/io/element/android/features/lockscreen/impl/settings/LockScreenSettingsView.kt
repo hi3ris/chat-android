@@ -13,7 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.lockscreen.impl.R
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDivider
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -65,6 +68,32 @@ fun LockScreenSettingsView(
                     }
                 )
             }
+            PreferenceDivider()
+            ListItem(
+                headlineContent = {
+                    Text(
+                        if (state.hasDuressPin) {
+                            "Code de contrainte (configuré)"
+                        } else {
+                            "Configurer un code de contrainte"
+                        }
+                    )
+                },
+                onClick = {
+                    state.eventSink(LockScreenSettingsEvents.OnSetupDuressPin)
+                },
+            )
+            if (state.hasDuressPin) {
+                ListItem(
+                    headlineContent = {
+                        Text("Supprimer le code de contrainte")
+                    },
+                    style = ListItemStyle.Destructive,
+                    onClick = {
+                        state.eventSink(LockScreenSettingsEvents.OnRemoveDuressPin)
+                    }
+                )
+            }
         }
     }
     if (state.showRemovePinConfirmation) {
@@ -77,6 +106,23 @@ fun LockScreenSettingsView(
             onDismiss = {
                 state.eventSink(LockScreenSettingsEvents.CancelRemovePin)
             }
+        )
+    }
+    if (state.showDuressPinDialog) {
+        TextFieldDialog(
+            title = "Code de contrainte",
+            content = "Choisissez un code à ${state.pinSize} chiffres, différent de votre code de déverrouillage. Le saisir à l'écran de verrouillage déconnecte le compte et efface les données locales de cet appareil.",
+            placeholder = "${state.pinSize} chiffres",
+            value = "",
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            validation = { !it.isNullOrEmpty() && it.length == state.pinSize && it.all { c -> c.isDigit() } },
+            onValidationErrorMessage = "Le code doit comporter ${state.pinSize} chiffres.",
+            onSubmit = {
+                state.eventSink(LockScreenSettingsEvents.SubmitDuressPin(it))
+            },
+            onDismissRequest = {
+                state.eventSink(LockScreenSettingsEvents.CancelDuressPin)
+            },
         )
     }
 }

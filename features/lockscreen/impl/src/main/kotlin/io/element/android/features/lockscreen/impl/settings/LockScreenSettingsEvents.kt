@@ -13,4 +13,8 @@ sealed interface LockScreenSettingsEvents {
     data object ConfirmRemovePin : LockScreenSettingsEvents
     data object CancelRemovePin : LockScreenSettingsEvents
     data object ToggleBiometricAllowed : LockScreenSettingsEvents
+    data object OnSetupDuressPin : LockScreenSettingsEvents
+    data class SubmitDuressPin(val pin: String) : LockScreenSettingsEvents
+    data object CancelDuressPin : LockScreenSettingsEvents
+    data object OnRemoveDuressPin : LockScreenSettingsEvents
 }
