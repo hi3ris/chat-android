@@ -35,4 +35,16 @@ interface LockScreenStore : EncryptedPinCodeStorage {
      * Sets whether the biometric unlock is allowed or not.
      */
     suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean)
+
+    /** Duress action: true = "server unavailable" lock (non-destructive), false = wipe. */
+    fun isDuressActionLock(): Flow<Boolean>
+
+    suspend fun getDuressActionLock(): Boolean
+
+    suspend fun setDuressActionLock(lock: Boolean)
+
+    /** Duress lock state (true when the app is in the "server unavailable" locked state). */
+    fun isDuressLocked(): Flow<Boolean>
+
+    suspend fun setDuressLocked(locked: Boolean)
 }

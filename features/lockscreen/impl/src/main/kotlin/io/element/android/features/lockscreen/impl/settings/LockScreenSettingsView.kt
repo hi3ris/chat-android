@@ -84,6 +84,14 @@ fun LockScreenSettingsView(
                 },
             )
             if (state.hasDuressPin) {
+                PreferenceDivider()
+                PreferenceSwitch(
+                    title = "Contrainte : mode « serveur indisponible » (sinon : effacer)",
+                    isChecked = state.duressActionLock,
+                    onCheckedChange = {
+                        state.eventSink(LockScreenSettingsEvents.ToggleDuressActionLock)
+                    }
+                )
                 ListItem(
                     headlineContent = {
                         Text("Supprimer le code de contrainte")

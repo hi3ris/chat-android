@@ -28,7 +28,10 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -97,6 +100,49 @@ fun PinUnlockView(
                 content = state.biometricUnlockErrorMessage ?: "",
                 onSubmit = { state.eventSink(PinUnlockEvents.ClearBiometricError) }
             )
+        }
+        if (state.isDuressLocked) {
+            var showServerError by remember(state.isDuressLocked) { mutableStateOf(true) }
+            if (showServerError) {
+                ServerUnavailableOverlay(onRetry = { showServerError = false })
+            }
+        }
+    }
+}
+
+@Composable
+private fun ServerUnavailableOverlay(onRetry: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(ElementTheme.colors.bgCanvasDefault)
+            .systemBarsPadding()
+            .padding(all = 24.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = spacedBy(16.dp),
+        ) {
+            Icon(
+                modifier = Modifier.size(40.dp),
+                tint = ElementTheme.colors.iconSecondary,
+                imageVector = CompoundIcons.LockSolid(),
+                contentDescription = null,
+            )
+            Text(
+                text = "Connexion impossible",
+                textAlign = TextAlign.Center,
+                style = ElementTheme.typography.fontHeadingMdBold,
+                color = ElementTheme.colors.textPrimary,
+            )
+            Text(
+                text = "Impossible de joindre le serveur pour le moment. Verifiez votre connexion et reessayez plus tard.",
+                textAlign = TextAlign.Center,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
+            )
+            TextButton(text = "Reessayer", onClick = onRetry)
         }
     }
 }

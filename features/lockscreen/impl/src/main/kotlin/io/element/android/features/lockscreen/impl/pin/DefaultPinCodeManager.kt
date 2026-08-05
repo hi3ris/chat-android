@@ -111,4 +111,14 @@ class DefaultPinCodeManager(
     override suspend fun deleteDuressPinCode() {
         lockScreenStore.deleteDuressEncryptedPinCode()
     }
+
+    override fun isDuressActionLock(): Flow<Boolean> = lockScreenStore.isDuressActionLock()
+
+    override suspend fun getDuressActionLock(): Boolean = lockScreenStore.getDuressActionLock()
+
+    override suspend fun setDuressActionLock(lock: Boolean) = lockScreenStore.setDuressActionLock(lock)
+
+    override fun isDuressLocked(): Flow<Boolean> = lockScreenStore.isDuressLocked()
+
+    override suspend fun setDuressLocked(locked: Boolean) = lockScreenStore.setDuressLocked(locked)
 }

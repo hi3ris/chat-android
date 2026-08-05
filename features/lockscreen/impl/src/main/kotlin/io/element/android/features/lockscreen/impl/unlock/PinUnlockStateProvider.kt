@@ -43,6 +43,7 @@ fun aPinUnlockState(
     biometricUnlockResult: BiometricAuthenticator.AuthenticationResult? = null,
     isUnlocked: Boolean = false,
     signOutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    isDuressLocked: Boolean = false,
 ) = PinUnlockState(
     pinEntry = AsyncData.Success(pinEntry),
     showWrongPinTitle = showWrongPinTitle,
@@ -52,5 +53,6 @@ fun aPinUnlockState(
     signOutAction = signOutAction,
     biometricUnlockResult = biometricUnlockResult,
     isUnlocked = isUnlocked,
+    isDuressLocked = isDuressLocked,
     eventSink = {}
 )

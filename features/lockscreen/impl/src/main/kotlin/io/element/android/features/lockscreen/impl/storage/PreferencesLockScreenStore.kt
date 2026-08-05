@@ -32,6 +32,8 @@ class PreferencesLockScreenStore(
     private val remainingAttemptsKey = intPreferencesKey("remaining_pin_code_attempts")
     private val biometricUnlockKey = booleanPreferencesKey("biometric_unlock_enabled")
     private val duressPinCodeKey = stringPreferencesKey("encoded_duress_pin_code")
+    private val duressActionLockKey = booleanPreferencesKey("duress_action_lock")
+    private val duressLockedKey = booleanPreferencesKey("duress_locked")
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return dataStore.data.map { preferences ->
@@ -111,6 +113,26 @@ class PreferencesLockScreenStore(
         return dataStore.data.map { preferences ->
             preferences[duressPinCodeKey] != null
         }
+    }
+
+    override fun isDuressActionLock(): Flow<Boolean> {
+        return dataStore.data.map { preferences -> preferences[duressActionLockKey] ?: false }
+    }
+
+    override suspend fun getDuressActionLock(): Boolean {
+        return dataStore.data.map { preferences -> preferences[duressActionLockKey] ?: false }.first()
+    }
+
+    override suspend fun setDuressActionLock(lock: Boolean) {
+        dataStore.edit { preferences -> preferences[duressActionLockKey] = lock }
+    }
+
+    override fun isDuressLocked(): Flow<Boolean> {
+        return dataStore.data.map { preferences -> preferences[duressLockedKey] ?: false }
+    }
+
+    override suspend fun setDuressLocked(locked: Boolean) {
+        dataStore.edit { preferences -> preferences[duressLockedKey] = locked }
     }
 
     private fun Preferences.getRemainingPinCodeAttemptsNumber() = this[remainingAttemptsKey] ?: lockScreenConfig.maxPinCodeAttemptsBeforeLogout

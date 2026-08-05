@@ -101,4 +101,16 @@ interface PinCodeManager {
      * Deletes the previously created duress pin code.
      */
     suspend fun deleteDuressPinCode()
+
+    /** Duress action: true = "server unavailable" lock (non-destructive), false = wipe. */
+    fun isDuressActionLock(): Flow<Boolean>
+
+    suspend fun getDuressActionLock(): Boolean
+
+    suspend fun setDuressActionLock(lock: Boolean)
+
+    /** Duress lock state flow. */
+    fun isDuressLocked(): Flow<Boolean>
+
+    suspend fun setDuressLocked(locked: Boolean)
 }

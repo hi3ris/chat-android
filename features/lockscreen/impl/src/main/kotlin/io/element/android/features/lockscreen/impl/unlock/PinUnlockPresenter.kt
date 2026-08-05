@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -59,6 +60,9 @@ class PinUnlockPresenter(
         val signOutAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
+        val isDuressLocked by produceState(initialValue = false) {
+            pinCodeManager.isDuressLocked().collect { value = it }
+        }
         var biometricUnlockResult by remember {
             mutableStateOf<BiometricAuthenticator.AuthenticationResult?>(null)
         }
@@ -81,12 +85,20 @@ class PinUnlockPresenter(
             if (pinEntry.isComplete()) {
                 val enteredPin = pinEntry.toText()
                 val isVerified = pinCodeManager.verifyPinCode(enteredPin)
-                if (!isVerified) {
-                    // Not the unlock PIN: check the duress (panic) code. If it matches,
-                    // silently sign out and wipe the local session instead of unlocking.
+                if (isVerified) {
+                    // Successful unlock: lift any duress "server unavailable" lock.
+                    pinCodeManager.setDuressLocked(false)
+                } else {
+                    // Not the unlock PIN: check the duress (panic) code.
                     if (pinCodeManager.verifyDuressPinCode(enteredPin)) {
                         pinEntryState.value = pinEntry.clear()
-                        coroutineScope.signOut(signOutAction)
+                        if (pinCodeManager.getDuressActionLock()) {
+                            // "Server unavailable" mode: keep the app hidden & locked, no wipe.
+                            pinCodeManager.setDuressLocked(true)
+                        } else {
+                            // Wipe mode: sign out and wipe the local session.
+                            coroutineScope.signOut(signOutAction)
+                        }
                         return@LaunchedEffect
                     }
                     pinEntryState.value = pinEntry.clear()
@@ -138,6 +150,7 @@ class PinUnlockPresenter(
             showBiometricUnlock = biometricUnlock.isActive,
             biometricUnlockResult = biometricUnlockResult,
             isUnlocked = isUnlocked.value,
+            isDuressLocked = isDuressLocked,
             eventSink = ::handleEvent,
         )
     }

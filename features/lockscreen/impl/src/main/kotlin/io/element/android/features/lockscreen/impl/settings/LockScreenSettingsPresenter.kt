@@ -54,6 +54,9 @@ class LockScreenSettingsPresenter(
         var showDuressPinDialog by remember {
             mutableStateOf(false)
         }
+        val duressActionLock by produceState(initialValue = false) {
+            pinCodeManager.isDuressActionLock().collect { value = it }
+        }
 
         val biometricUnlock = biometricAuthenticatorManager.rememberConfirmBiometricAuthenticator()
 
@@ -94,6 +97,11 @@ class LockScreenSettingsPresenter(
                         pinCodeManager.deleteDuressPinCode()
                     }
                 }
+                LockScreenSettingsEvents.ToggleDuressActionLock -> {
+                    coroutineScope.launch {
+                        pinCodeManager.setDuressActionLock(!duressActionLock)
+                    }
+                }
             }
         }
 
@@ -104,6 +112,7 @@ class LockScreenSettingsPresenter(
             showToggleBiometric = biometricAuthenticatorManager.isDeviceSecured,
             hasDuressPin = hasDuressPin,
             showDuressPinDialog = showDuressPinDialog,
+            duressActionLock = duressActionLock,
             pinSize = lockScreenConfig.pinSize,
             eventSink = ::handleEvent,
         )

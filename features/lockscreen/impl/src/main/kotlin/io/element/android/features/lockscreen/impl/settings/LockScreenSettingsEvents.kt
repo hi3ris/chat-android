@@ -17,4 +17,5 @@ sealed interface LockScreenSettingsEvents {
     data class SubmitDuressPin(val pin: String) : LockScreenSettingsEvents
     data object CancelDuressPin : LockScreenSettingsEvents
     data object OnRemoveDuressPin : LockScreenSettingsEvents
+    data object ToggleDuressActionLock : LockScreenSettingsEvents
 }
