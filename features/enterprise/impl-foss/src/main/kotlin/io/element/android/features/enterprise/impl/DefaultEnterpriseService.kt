@@ -24,8 +24,12 @@ class DefaultEnterpriseService : EnterpriseService {
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
 
-    override fun defaultHomeserverList(): List<String> = emptyList()
-    override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
+    override fun defaultHomeserverList(): List<String> = listOf("https://link.cda.tg")
+
+    override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean {
+        val host = homeserverUrl.substringAfter("://").substringBefore("/").trim().lowercase()
+        return host == "link.cda.tg"
+    }
 
     override suspend fun overrideBrandColor(sessionId: SessionId?, brandColor: String?) = Unit
 

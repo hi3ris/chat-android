@@ -24,7 +24,7 @@ open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
 
 fun anAccountProvider(
     url: String = AuthenticationConfig.MATRIX_ORG_URL,
-    subtitle: String? = "Matrix.org is an open network for secure, decentralized communication.",
+    subtitle: String? = "Link CDA — messagerie sécurisée et souveraine.",
     isPublic: Boolean = true,
     isMatrixOrg: Boolean = true,
 ) = AccountProvider(
