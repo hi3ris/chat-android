@@ -24,12 +24,12 @@ import java.net.URL
 
 /**
  * Numero de build interne de CETTE APK. A incrementer a chaque release publiee,
- * en phase avec le champ "versionCode" de kdodo-version.json (si le JSON annonce
+ * en phase avec le champ "versionCode" de link-version.json (si le JSON annonce
  * un versionCode strictement superieur, l'utilisateur se voit proposer la MAJ).
  */
 private const val CURRENT_APK_VERSION = 3
 
-private const val VERSION_URL = "https://link.cda.tg/kdodo-version.json"
+private const val VERSION_URL = "https://link.cda.tg/custom/link-version.json"
 private const val TIMEOUT_MS = 6000
 
 private data class UpdateInfo(
