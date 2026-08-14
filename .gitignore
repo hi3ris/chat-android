@@ -125,3 +125,4 @@ tools/matrix-rust-components-kotlin/
 tools/sdk/
 app/google-services.json
 *:Zone.Identifier
+app/signature/release.keystore
